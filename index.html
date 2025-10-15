@@ -105,8 +105,7 @@
   <!-- Lock screen overlay (only countdown visible until unlock) -->
   <div id="lockscreen">
     <div id="lockCountdown">Loading…</div>
-    <div id="lockMessage">Our page unlocks soon ✨</div>
-    <div class="lock-note">(The settings gear stays available for you.)</div>
+    <div id="lockMessage">✨</div>
   </div>
 
   <header>
@@ -462,7 +461,7 @@
     function updateLockCountdown(){
       const unlockAt = parseISO((settings.anniversaryDate||defaults.anniversaryDate) + 'T00:00:00');
       const diff = unlockAt - now();
-      lockCountdownEl.textContent = diff <= 0 ? 'Unlocked!' : ('Unlocks in ' + relTime(diff));
+      lockCountdownEl.textContent = diff <= 0 ? 'Unlocked!' : ('Unlocks on our anniversary: ' + relTime(diff));
     }
 
     function updateLockState(){
