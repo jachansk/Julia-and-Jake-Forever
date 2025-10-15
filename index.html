@@ -223,7 +223,7 @@
 
     function route(){
       const h = location.hash || '#/';
-      const match = routes.find(r=>h.startsWith(r.hash));
+      const match = routes.find(r => h === r.hash);
       setActive(match? match.id : 'home');
     }
     window.addEventListener('hashchange', route); route();
@@ -415,34 +415,6 @@
       }
     });
 
-  </script>
-  <script>
-    function setActive(id){
-      document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
-      const el = document.getElementById(id);
-      if (el) el.classList.add('active');
-      document.querySelectorAll('.tab').forEach(t => {
-        t.classList.toggle('active', t.dataset.target === id);
-      });
-    }
-  
-    const routes = [
-      { id: 'home', hash: '#/' },
-      { id: 'anniversary', hash: '#/anniversary' },
-      { id: 'memory', hash: '#/memory' },
-      { id: 'surprise', hash: '#/surprise' },
-      { id: 'settings', hash: '#/settings' }
-    ];
-  
-    function route(){
-      const h = location.hash || '#/';
-      const match = routes.find(r => h.startsWith(r.hash));
-      setActive(match ? match.id : 'home');
-    }
-  
-    window.addEventListener('hashchange', route);
-    // run on first load
-    route();
   </script>
 </body>
 </html>
