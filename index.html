@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Us — 1 Year ✨</title>
+  <meta name="description" content="A tiny site to celebrate our 1‑year anniversary — home, anniversary note, memory lane, and a surprise box with timed reveals." />
+  <style>
+    :root{
+      --bg:#0f172a;         /* slate-900 */
+      --panel:#111827;      /* gray-900 */
+      --muted:#94a3b8;      /* slate-400 */
+      --text:#e5e7eb;       /* gray-200 */
+      --accent:#a78bfa;     /* violet-400 */
+      --accent2:#34d399;    /* emerald-400 */
+      --rose:#fb7185;       /* rose-400 */
+      --gold:#facc15;       /* amber-400 */
+      --card:#0b1222;       
+      --ring:rgba(167,139,250,.5);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--text); background: radial-gradient(1200px 600px at 80% -10%, rgba(167,139,250,.20), transparent 60%),
+                         radial-gradient(900px 400px at 10% -10%, rgba(20,184,166,.15), transparent 60%),
+                         var(--bg);
+    }
+    a{color:var(--accent); text-decoration:none}
+    a:hover{text-decoration:underline}
+    header{
+      position:sticky; top:0; z-index:20; backdrop-filter:saturate(180%) blur(10px);
+      background:linear-gradient(to bottom, rgba(15,23,42,.9), rgba(15,23,42,.6));
+      border-bottom:1px solid rgba(255,255,255,.05)
+    }
+    .wrap{max-width:960px; margin:0 auto; padding:16px}
+    .nav{display:flex; gap:10px; align-items:center; justify-content:space-between}
+    .brand{display:flex; gap:10px; align-items:center}
+    .heart{filter: drop-shadow(0 0 12px rgba(251,113,133,.5));}
+    .tabs{display:flex; gap:8px; flex-wrap:wrap}
+    .tab{padding:8px 12px; border:1px solid rgba(255,255,255,.08); border-radius:999px; background:rgba(11,18,34,.6)}
+    .tab.active{border-color:var(--accent); box-shadow:0 0 0 2px var(--ring) inset}
+
+    main{padding:28px 16px 64px}
+    section{display:none; animation:fade .25s ease}
+    section.active{display:block}
+    @keyframes fade{from{opacity:.2; transform:translateY(4px)} to{opacity:1; transform:none}}
+
+    .hero{display:grid; grid-template-columns:1.2fr .8fr; gap:24px; align-items:center}
+    .card{background:linear-gradient(to bottom right, rgba(255,255,255,.06), rgba(255,255,255,.03)); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,.25)}
+    .btn{display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(167,139,250,.12); color:var(--text); cursor:pointer}
+    .btn:hover{filter:brightness(1.08)}
+
+    .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .tile{background:linear-gradient(to bottom right, rgba(255,255,255,.05), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:16px}
+
+    .timeline{position:relative; margin:16px 0;}
+    .timeline:before{content:""; position:absolute; left:14px; top:0; bottom:0; width:2px; background:linear-gradient(var(--accent), transparent)}
+    .t-item{position:relative; padding-left:42px; margin:16px 0}
+    .t-dot{position:absolute; left:6px; top:6px; width:16px; height:16px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 4px rgba(167,139,250,.2)}
+
+    .surprise-list{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:16px}
+    .s-card{padding:16px; border-radius:16px; border:1px solid rgba(255,255,255,.08); background:linear-gradient(to bottom right, rgba(255,255,255,.05), rgba(255,255,255,.02))}
+    .tag{padding:3px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.15); font-size:12px; opacity:.95}
+    .tag.lock{border-color:rgba(250,204,21,.5); color:var(--gold)}
+    .tag.open{border-color:rgba(52,211,153,.5); color:var(--accent2)}
+    .tag.hidden{border-color:rgba(251,113,133,.5); color:var(--rose)}
+
+    .footer{opacity:.7; font-size:13px; text-align:center; padding-top:24px}
+    .settings{position:fixed; right:18px; bottom:18px}
+
+    .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); padding:2px 6px; border-radius:6px; font-size:12px}
+
+    .blurred{filter: blur(5px); pointer-events:none; user-select:none}
+    .countdown{font-variant-numeric:tabular-nums}
+
+    @media (max-width:900px){
+      .hero{grid-template-columns:1fr}
+      .grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <div class="brand">
+        <svg class="heart" width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 21s-7.5-4.438-9.75-8.25C.75 9.75 3 6 6.75 6 9 6 10.5 7.5 12 9c1.5-1.5 3-3 5.25-3C21 6 23.25 9.75 21.75 12.75 19.5 16.563 12 21 12 21Z" fill="currentColor"/></svg>
+        <strong>Us • Year One</strong>
+      </div>
+      <nav class="tabs" id="navTabs"></nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- HOME -->
+    <section id="home" class="active">
+      <div class="hero">
+        <div class="card">
+          <h1 style="margin:0 0 8px;font-size:34px;line-height:1.1">Hi love — happy one year 💫</h1>
+          <p style="margin:0 0 16px; color:var(--muted)">I made us a little corner of the internet. Explore the note, wander down memory lane, and peek at the surprise box (some gifts unlock over time ✨).</p>
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <a class="btn" href="#/anniversary">Read the 1‑year note</a>
+            <a class="btn" href="#/memory">Walk memory lane</a>
+            <a class="btn" href="#/surprise">Open the surprise box</a>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="tile"><h3 style="margin-top:0">Today</h3><div id="today"></div></div>
+          <div class="tile"><h3 style="margin-top:0">Countdown</h3><div id="aniCountdown" class="countdown"></div></div>
+          <div class="tile"><h3 style="margin-top:0">Now Playing</h3><p style="color:var(--muted)">Add a link to a shared playlist or a song here in <span class="kbd">/settings</span>.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ANNIVERSARY NOTE -->
+    <section id="anniversary">
+      <div class="card">
+        <h2 style="margin-top:0">Happy 1‑Year Anniversary ❤️</h2>
+        <p style="color:var(--muted)">Here’s a little note to mark our first lap around the sun together.</p>
+        <div id="noteContent" style="line-height:1.7">
+          <p>One year ago, we started something that keeps surprising me in the best ways. From cozy calls across time zones to silly memes and the serious stuff, I love the shape our days take together.</p>
+          <p>Thank you for your patience, your humor, and the way you turn ordinary moments into favorites. Here’s to the next tiny adventures — the good coffee, late‑night laughs, new cities, and everything else in between.</p>
+          <p>With love, always. ✨</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- MEMORY LANE -->
+    <section id="memory">
+      <div class="card">
+        <h2 style="margin-top:0">Memory Lane 📸</h2>
+        <p style="color:var(--muted)">A lightweight timeline you can extend by editing the JSON data source.</p>
+        <div id="timeline" class="timeline"></div>
+      </div>
+    </section>
+
+    <!-- SURPRISE BOX -->
+    <section id="surprise">
+      <div class="card">
+        <h2 style="margin-top:0">Surprise Box 🎁</h2>
+        <p style="color:var(--muted)">Some gifts are hidden for now. You’ll see their unlock time and a countdown. When the time arrives, they open automatically. ✨</p>
+        <div id="surpriseList" class="surprise-list"></div>
+      </div>
+    </section>
+
+    <!-- SETTINGS (owner) -->
+    <section id="settings">
+      <div class="card">
+        <h2 style="margin-top:0">Site Settings (Owner)</h2>
+        <p style="color:var(--muted)">These settings save to your browser only. Use them to point the site at your live JSON without redeploying.</p>
+        <div style="display:grid; gap:12px; max-width:700px">
+          <label>Data URL (Gist raw or any CORS‑friendly JSON)
+            <input id="dataUrl" type="url" placeholder="https://gist.githubusercontent.com/.../raw.json" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0b1222; color:var(--text)">
+          </label>
+          <label>Owner Passphrase (to unlock settings link)
+            <input id="ownerCode" type="text" placeholder="love2025" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0b1222; color:var(--text)">
+          </label>
+          <label>Anniversary (YYYY‑MM‑DD)
+            <input id="anniversaryDate" type="date" style="padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0b1222; color:var(--text)">
+          </label>
+          <label>Playlist (optional)
+            <input id="playlistUrl" type="url" placeholder="https://open.spotify.com/playlist/..." style="padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0b1222; color:var(--text)">
+          </label>
+          <div>
+            <button class="btn" id="saveSettings">Save</button>
+            <span id="saveStatus" style="margin-left:10px; color:var(--muted)"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">Made with ❤ — <span id="ownerLinkWrap" style="display:none"><a id="ownerLink" href="#/settings">settings</a></span></div>
+  </main>
+
+  <div class="settings"><button title="Owner" class="btn" id="ownerBtn">⚙️</button></div>
+
+  <script>
+    /********************
+     * CONFIG + STORAGE *
+     ********************/
+    const DEFAULT_OWNER_CODE = 'love2025';
+    const STORE_KEY = 'anni.settings.v1';
+
+    const defaults = {
+      ownerCode: DEFAULT_OWNER_CODE,
+      dataUrl: '', // If empty, built-in demo data will be used.
+      anniversaryDate: new Date().toISOString().slice(0,10),
+      playlistUrl: ''
+    };
+
+    function loadSettings(){
+      try{ return {...defaults, ...(JSON.parse(localStorage.getItem(STORE_KEY))||{})}; }
+      catch(e){ return {...defaults}; }
+    }
+    function saveSettings(s){ localStorage.setItem(STORE_KEY, JSON.stringify(s)); }
+
+    let settings = loadSettings();
+
+    /****************
+     * NAV / ROUTER *
+     ****************/
+    const routes = [
+      { id:'home', label:'Home', hash:'#/' },
+      { id:'anniversary', label:'Anniversary', hash:'#/anniversary' },
+      { id:'memory', label:'Memory Lane', hash:'#/memory' },
+      { id:'surprise', label:'Surprise Box', hash:'#/surprise' },
+      { id:'settings', label:'Settings', hash:'#/settings', owner:true },
+    ];
+
+    const nav = document.getElementById('navTabs');
+    routes.filter(r=>!r.owner).forEach(r=>{
+      const a = document.createElement('a'); a.href = r.hash; a.className='tab'; a.textContent=r.label; a.dataset.target=r.id; nav.appendChild(a);
+    });
+
+    function setActive(id){
+      document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+      const el = document.getElementById(id); if(el) el.classList.add('active');
+      document.querySelectorAll('.tab').forEach(t=>{
+        t.classList.toggle('active', t.dataset.target===id);
+      });
+    }
+
+    function route(){
+      const h = location.hash || '#/';
+      const match = routes.find(r=>h.startsWith(r.hash));
+      setActive(match? match.id : 'home');
+    }
+    window.addEventListener('hashchange', route); route();
+
+    /*******************
+     * UTIL / TIME UTC *
+     *******************/
+    const TZ = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const fmt = (d, opts={})=>new Intl.DateTimeFormat(undefined,{dateStyle:'medium', timeStyle: opts.time? 'short': undefined}).format(d);
+
+    function now(){ return new Date(); }
+    function parseISO(s){ return new Date(s); }
+
+    function relTime(ms){
+      const sec = Math.max(0, Math.floor(ms/1000));
+      const d = Math.floor(sec/86400);
+      const h = Math.floor((sec%86400)/3600);
+      const m = Math.floor((sec%3600)/60);
+      const s = sec%60;
+      return `${String(d).padStart(2,'0')}d ${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s`;
+    }
+
+    /*******************
+     * HOME WIDGETS    *
+     *******************/
+    const todayEl = document.getElementById('today');
+    const aniEl = document.getElementById('aniCountdown');
+
+    function renderHome(){
+      const today = now();
+      todayEl.textContent = `${fmt(today)} • ${TZ}`;
+      const anniv = parseISO(settings.anniversaryDate + 'T00:00:00');
+      const diff = anniv - today;
+      aniEl.textContent = diff>0 ? `T‑${relTime(diff)}` : `Day ${Math.ceil((today - anniv)/86400000) + 1} since our date ✨`;
+    }
+    setInterval(renderHome, 1000); renderHome();
+
+    /*******************
+     * DATA LOADING    *
+     *******************/
+    const demoData = {
+      note: null,
+      memory: [
+        { date: '2024-11-12', title: 'First long call', text:'We talked for hours and lost track of time.' },
+        { date: '2025-01-05', title: 'Snow day', text:'We sent each other the same song without planning it.' },
+        { date: '2025-03-18', title: 'Tiny victory', text:'Crushed a deadline, celebrated with a shared playlist.' },
+        { date: '2025-07-02', title: 'Inside joke born', text:'The infamous 🐸 emoji moment.' }
+      ],
+      surprises: [
+        { id:'g1', status:'announced', title:'A poem for you', text:'A small set of lines for a big heart.', url:'', image:'', unlock_at:'2025-10-20T16:00:00-07:00' },
+        { id:'g2', status:'hidden', title:'Mystery drop', text:'You’ll see what it is when it unlocks.', url:'', image:'', unlock_at:'2025-10-25T09:00:00-07:00' },
+        { id:'g3', status:'announced', title:'Virtual picnic kit', text:'Recipes + playlist', url:'', image:'', unlock_at:'2025-11-01T10:00:00-07:00' }
+      ]
+    };
+
+    async function fetchData(){
+      if(!settings.dataUrl){ return structuredClone(demoData); }
+      try{
+        const res = await fetch(settings.dataUrl + `?t=${Date.now()}`, {cache:'no-store'});
+        if(!res.ok) throw new Error('Fetch failed');
+        return await res.json();
+      }catch(e){ console.warn('Falling back to demo data', e); return structuredClone(demoData); }
+    }
+
+    /*******************
+     * MEMORY LANE     *
+     *******************/
+    function renderTimeline(items){
+      const wrap = document.getElementById('timeline');
+      wrap.innerHTML = '';
+      const sorted = [...items].sort((a,b)=> a.date.localeCompare(b.date));
+      sorted.forEach(it=>{
+        const d = document.createElement('div'); d.className='t-item card';
+        d.innerHTML = `<div class="t-dot"></div>
+          <div style="display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap">
+            <strong>${fmt(parseISO(it.date+'T00:00:00'))}</strong>
+            <span style="opacity:.8">${it.title||''}</span>
+          </div>
+          <div style="color:var(--muted); margin-top:8px">${it.text||''}</div>`;
+        wrap.appendChild(d);
+      });
+    }
+
+    /*******************
+     * SURPRISE BOX    *
+     *******************/
+    function statusTag(status, open){
+      if(open) return `<span class="tag open">Available</span>`;
+      if(status==='hidden') return `<span class="tag hidden">Hidden</span>`;
+      return `<span class="tag lock">Locked</span>`;
+    }
+
+    function surpriseCard(item){
+      const nowMs = now().getTime();
+      const unlockMs = new Date(item.unlock_at).getTime();
+      const isOpen = nowMs >= unlockMs;
+      const timeLeft = unlockMs - nowMs;
+      const showText = isOpen || item.status !== 'hidden';
+      const title = showText ? item.title : 'Mystery gift';
+      const text = showText ? (item.text||'') : 'Opens soon 💌';
+      const blur = !isOpen && item.status==='hidden' ? 'blurred' : '';
+
+      return `<div class="s-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:8px">
+          <strong>${title}</strong>
+          ${statusTag(item.status, isOpen)}
+        </div>
+        <div class="${blur}" style="color:var(--muted); min-height:40px">${text}</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px">
+          <small style="opacity:.8">Unlocks: ${fmt(new Date(item.unlock_at),{time:true})}</small>
+          ${!isOpen ? `<small class="countdown" data-unlock="${unlockMs}">${relTime(timeLeft)}</small>` : (item.url? `<a class="btn" href="${item.url}" target="_blank" rel="noopener">Open</a>`: '<span class="tag open">Enjoy ✨</span>')}
+        </div>
+      </div>`;
+    }
+
+    function tickCountdowns(){
+      document.querySelectorAll('[data-unlock]').forEach(el=>{
+        const t = parseInt(el.getAttribute('data-unlock'),10) - now().getTime();
+        el.textContent = relTime(t);
+      })
+    }
+    setInterval(tickCountdowns, 1000);
+
+    async function renderAll(){
+      const data = await fetchData();
+      // Note content
+      if(data.note){ document.getElementById('noteContent').innerHTML = data.note; }
+      // Timeline
+      renderTimeline(Array.isArray(data.memory)? data.memory : []);
+      // Surprises
+      const list = document.getElementById('surpriseList');
+      const items = Array.isArray(data.surprises)? data.surprises : [];
+      // sort: earliest unlock first
+      items.sort((a,b)=> new Date(a.unlock_at) - new Date(b.unlock_at));
+      list.innerHTML = items.map(surpriseCard).join('');
+    }
+
+    renderAll();
+
+    /*******************
+     * OWNER CONTROLS  *
+     *******************/
+    const ownerBtn = document.getElementById('ownerBtn');
+    const ownerLinkWrap = document.getElementById('ownerLinkWrap');
+
+    function revealSettingsLink(){ ownerLinkWrap.style.display='inline'; }
+
+    ownerBtn.addEventListener('click', ()=>{
+      const code = prompt('Owner passphrase?');
+      if(code && code === settings.ownerCode){ revealSettingsLink(); location.hash = '#/settings'; }
+      else alert('Wrong code');
+    });
+
+    // Settings page bindings
+    const dataUrlI = document.getElementById('dataUrl');
+    const ownerCodeI = document.getElementById('ownerCode');
+    const annivI = document.getElementById('anniversaryDate');
+    const playlistI = document.getElementById('playlistUrl');
+    const saveBtn = document.getElementById('saveSettings');
+    const saveStatus = document.getElementById('saveStatus');
+
+    function loadSettingsIntoForm(){
+      dataUrlI.value = settings.dataUrl || '';
+      ownerCodeI.value = settings.ownerCode || DEFAULT_OWNER_CODE;
+      annivI.value = settings.anniversaryDate || defaults.anniversaryDate;
+      playlistI.value = settings.playlistUrl || '';
+    }
+    loadSettingsIntoForm();
+
+    saveBtn.addEventListener('click', ()=>{
+      settings = {
+        ...settings,
+        dataUrl: dataUrlI.value.trim(),
+        ownerCode: ownerCodeI.value.trim() || DEFAULT_OWNER_CODE,
+        anniversaryDate: annivI.value || defaults.anniversaryDate,
+        playlistUrl: playlistI.value.trim()
+      };
+      saveSettings(settings);
+      saveStatus.textContent = 'Saved!';
+      setTimeout(()=> saveStatus.textContent='', 1500);
+      renderHome();
+      renderAll();
+    });
+
+    // Keyboard: press "o" to open settings prompt
+    document.addEventListener('keydown', (e)=>{
+      if((e.key==='o' || e.key==='O') && (e.ctrlKey || e.metaKey)){
+        ownerBtn.click();
+      }
+    });
+
+  </script>
+</body>
+</html>
