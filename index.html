@@ -74,6 +74,26 @@
     .blurred{filter: blur(5px); pointer-events:none; user-select:none}
     .countdown{font-variant-numeric:tabular-nums}
 
+    /* ===== Lock screen overlay ===== */
+    #lockscreen {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at 50% 40%, rgba(167,139,250,0.12), var(--bg));
+      z-index: 9999; /* Above everything, but below the gear we position later */
+      transition: opacity 500ms ease;
+    }
+    #lockscreen.hidden { opacity: 0; pointer-events: none; }
+    #lockCountdown { font-size: 2rem; letter-spacing: .5px; color: var(--accent); font-variant-numeric: tabular-nums; }
+    #lockMessage  { margin-top: 10px; color: var(--muted); }
+    .lock-note    { margin-top: 14px; font-size: 12px; color: var(--muted); opacity: .9; }
+
+    /* Keep the gear button above the overlay */
+    .settings { position: fixed; right: 18px; bottom: 18px; z-index: 10000; }
+
     @media (max-width:900px){
       .hero{grid-template-columns:1fr}
       .grid{grid-template-columns:1fr}
@@ -81,6 +101,14 @@
   </style>
 </head>
 <body>
+
+  <!-- Lock screen overlay (only countdown visible until unlock) -->
+  <div id="lockscreen">
+    <div id="lockCountdown">Loading…</div>
+    <div id="lockMessage">Our page unlocks soon ✨</div>
+    <div class="lock-note">(The settings gear stays available for you.)</div>
+  </div>
+
   <header>
     <div class="wrap nav">
       <div class="brand">
@@ -159,6 +187,9 @@
           <label>Anniversary (YYYY‑MM‑DD)
             <input id="anniversaryDate" type="date" style="padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0b1222; color:var(--text)">
           </label>
+          <label class="" style="display:flex; align-items:center; gap:8px">
+            <input id="previewUnlocked" type="checkbox"> Preview unlocked site (owner only, this device)
+          </label>
           <label>Playlist (optional)
             <input id="playlistUrl" type="url" placeholder="https://open.spotify.com/playlist/..." style="padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0b1222; color:var(--text)">
           </label>
@@ -186,7 +217,8 @@
       ownerCode: DEFAULT_OWNER_CODE,
       dataUrl: '', // If empty, built-in demo data will be used.
       anniversaryDate: new Date().toISOString().slice(0,10),
-      playlistUrl: ''
+      playlistUrl: '',
+      previewUnlocked: false // NEW: owner preview toggle
     };
 
     function loadSettings(){
@@ -367,7 +399,6 @@
      * OWNER CONTROLS  *
      *******************/
     const ownerBtn = document.getElementById('ownerBtn');
-    const ownerLinkWrap = document.getElementById('ownerLinkWrap');
 
     ownerBtn.addEventListener('click', ()=>{
       const code = prompt('Owner passphrase?');
@@ -380,6 +411,7 @@
     const ownerCodeI = document.getElementById('ownerCode');
     const annivI = document.getElementById('anniversaryDate');
     const playlistI = document.getElementById('playlistUrl');
+    const previewI = document.getElementById('previewUnlocked');
     const saveBtn = document.getElementById('saveSettings');
     const saveStatus = document.getElementById('saveStatus');
 
@@ -388,6 +420,7 @@
       ownerCodeI.value = settings.ownerCode || DEFAULT_OWNER_CODE;
       annivI.value = settings.anniversaryDate || defaults.anniversaryDate;
       playlistI.value = settings.playlistUrl || '';
+      previewI.checked = !!settings.previewUnlocked;
     }
     loadSettingsIntoForm();
 
@@ -397,12 +430,14 @@
         dataUrl: dataUrlI.value.trim(),
         ownerCode: ownerCodeI.value.trim() || DEFAULT_OWNER_CODE,
         anniversaryDate: annivI.value || defaults.anniversaryDate,
-        playlistUrl: playlistI.value.trim()
+        playlistUrl: playlistI.value.trim(),
+        previewUnlocked: !!previewI.checked
       };
       saveSettings(settings);
       saveStatus.textContent = 'Saved!';
       setTimeout(()=> saveStatus.textContent='', 1500);
       renderHome();
+      updateLockState();
       renderAll();
     });
 
@@ -412,6 +447,37 @@
         ownerBtn.click();
       }
     });
+
+    /***********************
+     * GLOBAL UNLOCK LOGIC *
+     ***********************/
+    const lockEl = document.getElementById('lockscreen');
+    const lockCountdownEl = document.getElementById('lockCountdown');
+
+    function isUnlockTime(){
+      const unlockAt = parseISO((settings.anniversaryDate||defaults.anniversaryDate) + 'T00:00:00');
+      return now() >= unlockAt;
+    }
+
+    function updateLockCountdown(){
+      const unlockAt = parseISO((settings.anniversaryDate||defaults.anniversaryDate) + 'T00:00:00');
+      const diff = unlockAt - now();
+      lockCountdownEl.textContent = diff <= 0 ? 'Unlocked!' : ('Unlocks in ' + relTime(diff));
+    }
+
+    function updateLockState(){
+      const unlocked = settings.previewUnlocked || isUnlockTime();
+      if(unlocked){
+        lockEl.classList.add('hidden');
+      }else{
+        lockEl.classList.remove('hidden');
+      }
+    }
+
+    setInterval(()=>{ updateLockCountdown(); updateLockState(); }, 1000);
+    // Initial state on load
+    updateLockCountdown();
+    updateLockState();
 
   </script>
 </body>
