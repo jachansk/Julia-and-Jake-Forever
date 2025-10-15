@@ -170,7 +170,7 @@
       </div>
     </section>
 
-    <div class="footer">Made with ❤ Jake<span id="ownerLinkWrap" style="display:none"><a id="ownerLink" href="#/settings">settings</a></span></div>
+    <div class="footer">Made with ❤ Jake</div>
   </main>
 
   <div class="settings"><button title="Owner" class="btn" id="ownerBtn">⚙️</button></div>
@@ -369,11 +369,9 @@
     const ownerBtn = document.getElementById('ownerBtn');
     const ownerLinkWrap = document.getElementById('ownerLinkWrap');
 
-    function revealSettingsLink(){ ownerLinkWrap.style.display='inline'; }
-
     ownerBtn.addEventListener('click', ()=>{
       const code = prompt('Owner passphrase?');
-      if(code && code === settings.ownerCode){ revealSettingsLink(); location.hash = '#/settings'; }
+      if(code && code === settings.ownerCode){ location.hash = '#/settings'; }
       else alert('Wrong code');
     });
 
