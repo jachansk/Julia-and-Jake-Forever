@@ -127,7 +127,7 @@
           <h1 style="margin:0 0 8px;font-size:34px;line-height:1.1">Hi love — happy one year 💫</h1>
           <p style="margin:0 0 16px; color:var(--muted)">I made us a little corner of the internet. Explore the note, wander down memory lane, and peek at the surprise box (some gifts unlock over time ✨).</p>
           <div style="display:flex; gap:10px; flex-wrap:wrap">
-            <a class="btn" href="#/anniversary">Read the 1‑year note</a>
+            <a class="btn" href="#/anniversary">Read the 1-year note</a>
             <a class="btn" href="#/memory">Walk memory lane</a>
             <a class="btn" href="#/surprise">Open the surprise box</a>
           </div>
@@ -143,11 +143,11 @@
     <!-- ANNIVERSARY NOTE -->
     <section id="anniversary">
       <div class="card">
-        <h2 style="margin-top:0">Happy 1‑Year Anniversary ❤️</h2>
+        <h2 style="margin-top:0">Happy 1-Year Anniversary ❤️</h2>
         <p style="color:var(--muted)">Here’s a little note to mark our first lap around the sun together.</p>
         <div id="noteContent" style="line-height:1.7">
           <p>One year ago, we started something that keeps surprising me in the best ways. From cozy calls across time zones to silly memes and the serious stuff, I love the shape our days take together.</p>
-          <p>Thank you for your patience, your humor, and the way you turn ordinary moments into favorites. Here’s to the next tiny adventures — the good coffee, late‑night laughs, new cities, and everything else in between.</p>
+          <p>Thank you for your patience, your humor, and the way you turn ordinary moments into favorites. Here’s to the next tiny adventures — the good coffee, late-night laughs, new cities, and everything else in between.</p>
           <p>With love, always. ✨</p>
         </div>
       </div>
@@ -177,13 +177,13 @@
         <h2 style="margin-top:0">Site Settings (Owner)</h2>
         <p style="color:var(--muted)">These settings save to your browser only. Use them to point the site at your live JSON without redeploying.</p>
         <div style="display:grid; gap:12px; max-width:700px">
-          <label>Data URL (Gist raw or any CORS‑friendly JSON)
+          <label>Data URL (Gist raw or any CORS-friendly JSON)
             <input id="dataUrl" type="url" placeholder="https://gist.githubusercontent.com/.../raw.json" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0b1222; color:var(--text)">
           </label>
           <label>Owner Passphrase (to unlock settings link)
             <input id="ownerCode" type="text" placeholder="love2025" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0b1222; color:var(--text)">
           </label>
-          <label>Anniversary (YYYY‑MM‑DD)
+          <label>Anniversary (YYYY-MM-DD)
             <input id="anniversaryDate" type="date" style="padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:#0b1222; color:var(--text)">
           </label>
           <label class="" style="display:flex; align-items:center; gap:8px">
@@ -212,10 +212,16 @@
     const DEFAULT_OWNER_CODE = 'love2025';
     const STORE_KEY = 'anni.settings.v1';
 
+    // 🔒 Pin to midnight Oct 19 Sweden time (CEST in 2025 = UTC+02:00)
+    // This instant is used everywhere for countdowns/unlock, regardless of device TZ.
+    const ANNIV_STHLM_ISO = '2025-10-19T00:00:00+02:00';
+    const ANNIV_UTC_MS = Date.parse(ANNIV_STHLM_ISO);
+
     const defaults = {
       ownerCode: DEFAULT_OWNER_CODE,
       dataUrl: '', // If empty, built-in demo data will be used.
-      anniversaryDate: new Date().toISOString().slice(0,10),
+      // Keep UI sensible, but logic below ignores this in favor of ANNIV_STHLM_ISO
+      anniversaryDate: '2025-10-19',
       playlistUrl: '',
       previewUnlocked: false // NEW: owner preview toggle
     };
@@ -286,9 +292,15 @@
     function renderHome(){
       const today = now();
       todayEl.textContent = `${fmt(today)} • ${TZ}`;
-      const anniv = parseISO(settings.anniversaryDate + 'T00:00:00');
-      const diff = anniv - today;
-      aniEl.textContent = diff>0 ? `T‑${relTime(diff)}` : `Day ${Math.ceil((today - anniv)/86400000) + 1} since our date ✨`;
+
+      // Use the fixed Stockholm instant for all devices
+      const diff = ANNIV_UTC_MS - Date.now();
+      if (diff > 0) {
+        aniEl.textContent = `T-${relTime(diff)}`;
+      } else {
+        const daysSince = Math.ceil((Date.now() - ANNIV_UTC_MS) / 86400000) + 1;
+        aniEl.textContent = `Day ${daysSince} since our date ✨`;
+      }
     }
     setInterval(renderHome, 1000); renderHome();
 
@@ -433,7 +445,7 @@
         ...settings,
         dataUrl: dataUrlI.value.trim(),
         ownerCode: ownerCodeI.value.trim() || DEFAULT_OWNER_CODE,
-        anniversaryDate: annivI.value || defaults.anniversaryDate,
+        anniversaryDate: annivI.value || defaults.anniversaryDate, // UI only; logic uses ANNIV_STHLM_ISO
         playlistUrl: playlistI.value.trim(),
         previewUnlocked: !!previewI.checked
       };
@@ -459,13 +471,12 @@
     const lockCountdownEl = document.getElementById('lockCountdown');
 
     function isUnlockTime(){
-      const unlockAt = parseISO((settings.anniversaryDate||defaults.anniversaryDate) + 'T00:00:00');
-      return now() >= unlockAt;
+      // Compare device time to the fixed Stockholm instant
+      return Date.now() >= ANNIV_UTC_MS || !!settings.previewUnlocked;
     }
 
     function updateLockCountdown(){
-      const unlockAt = parseISO((settings.anniversaryDate||defaults.anniversaryDate) + 'T00:00:00');
-      const diff = unlockAt - now();
+      const diff = ANNIV_UTC_MS - Date.now();
       lockCountdownEl.innerHTML = diff <= 0
         ? 'Unlocked!'
         : `One year. Fifty Weeks.<br>500 Million Miles<br>Just the Beginning<br><br>Unlocks on our anniversary: ${relTime(diff)}`;
