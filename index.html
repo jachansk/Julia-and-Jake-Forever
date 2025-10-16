@@ -401,7 +401,12 @@
 
     ownerBtn.addEventListener('click', ()=>{
       const code = prompt('Owner passphrase?');
-      if(code && code === settings.ownerCode){ location.hash = '#/settings'; }
+      if(code && code === settings.ownerCode){  
+        settings.previewUnlocked = true;
+        saveSettings(settings);
+        updateLockState();            // hide overlay immediately
+        location.hash = '#/settings'; // then navigate
+      }
       else alert('Wrong code');
     });
 
