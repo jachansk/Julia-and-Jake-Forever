@@ -466,7 +466,9 @@
     function updateLockCountdown(){
       const unlockAt = parseISO((settings.anniversaryDate||defaults.anniversaryDate) + 'T00:00:00');
       const diff = unlockAt - now();
-      lockCountdownEl.textContent = diff <= 0 ? 'Unlocked!' : ('One year. Fifty Weeks.\n500 Million Miles\nJust the Beginning\nUnlocks on our anniversary: ' + relTime(diff));
+      lockCountdownEl.innerHTML = diff <= 0
+        ? 'Unlocked!'
+        : `One year. Fifty Weeks.<br>500 Million Miles<br>Just the Beginning<br><br>Unlocks on our anniversary: ${relTime(diff)}`;
     }
 
     function updateLockState(){
