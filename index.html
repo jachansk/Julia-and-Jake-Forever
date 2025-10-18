@@ -46,35 +46,6 @@
     section.active{display:block}
     @keyframes fade{from{opacity:.2; transform:translateY(4px)} to{opacity:1; transform:none}}
 
-    .hero{display:grid; grid-template-columns:1.2fr .8fr; gap:24px; align-items:center}
-    .card{background:linear-gradient(to bottom right, rgba(255,255,255,.06), rgba(255,255,255,.03)); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,.25)}
-    .btn{display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(167,139,250,.12); color:var(--text); cursor:pointer}
-    .btn:hover{filter:brightness(1.08)}
-
-    .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
-    .tile{background:linear-gradient(to bottom right, rgba(255,255,255,.05), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:16px}
-    .tile.nowplaying { grid-column: 1 / -1; }
-    
-    .timeline{position:relative; margin:16px 0;}
-    .timeline:before{content:""; position:absolute; left:14px; top:0; bottom:0; width:2px; background:linear-gradient(var(--accent), transparent)}
-    .t-item{position:relative; padding-left:42px; margin:16px 0}
-    .t-dot{position:absolute; left:6px; top:6px; width:16px; height:16px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 4px rgba(167,139,250,.2)}
-
-    .surprise-list{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:16px}
-    .s-card{padding:16px; border-radius:16px; border:1px solid rgba(255,255,255,.08); background:linear-gradient(to bottom right, rgba(255,255,255,.05), rgba(255,255,255,.02))}
-    .tag{padding:3px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.15); font-size:12px; opacity:.95}
-    .tag.lock{border-color:rgba(250,204,21,.5); color:var(--gold)}
-    .tag.open{border-color:rgba(52,211,153,.5); color:var(--accent2)}
-    .tag.hidden{border-color:rgba(251,113,133,.5); color:var(--rose)}
-
-    .footer{opacity:.7; font-size:13px; text-align:center; padding-top:24px}
-    .settings{position:fixed; right:18px; bottom:18px}
-
-    .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); padding:2px 6px; border-radius:6px; font-size:12px}
-
-    .blurred{filter: blur(5px); pointer-events:none; user-select:none}
-    .countdown{font-variant-numeric:tabular-nums}
-
     /* 2x2 grid: left column = photo (row 1) + main card (row 2); right column = tiles spanning both rows */
     .hero{
       display:grid;
@@ -109,6 +80,35 @@
       }
     }
 
+    .card{background:linear-gradient(to bottom right, rgba(255,255,255,.06), rgba(255,255,255,.03)); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,.25)}
+    .btn{display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(167,139,250,.12); color:var(--text); cursor:pointer}
+    .btn:hover{filter:brightness(1.08)}
+
+    .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .tile{background:linear-gradient(to bottom right, rgba(255,255,255,.05), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:16px}
+    .tile.nowplaying { grid-column: 1 / -1; }
+    
+    .timeline{position:relative; margin:16px 0;}
+    .timeline:before{content:""; position:absolute; left:14px; top:0; bottom:0; width:2px; background:linear-gradient(var(--accent), transparent)}
+    .t-item{position:relative; padding-left:42px; margin:16px 0}
+    .t-dot{position:absolute; left:6px; top:6px; width:16px; height:16px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 4px rgba(167,139,250,.2)}
+
+    .surprise-list{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:16px}
+    .s-card{padding:16px; border-radius:16px; border:1px solid rgba(255,255,255,.08); background:linear-gradient(to bottom right, rgba(255,255,255,.05), rgba(255,255,255,.02))}
+    .tag{padding:3px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.15); font-size:12px; opacity:.95}
+    .tag.lock{border-color:rgba(250,204,21,.5); color:var(--gold)}
+    .tag.open{border-color:rgba(52,211,153,.5); color:var(--accent2)}
+    .tag.hidden{border-color:rgba(251,113,133,.5); color:var(--rose)}
+
+    .footer{opacity:.7; font-size:13px; text-align:center; padding-top:24px}
+    .settings{position:fixed; right:18px; bottom:18px}
+
+    .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); padding:2px 6px; border-radius:6px; font-size:12px}
+
+    .blurred{filter: blur(5px); pointer-events:none; user-select:none}
+    .countdown{font-variant-numeric:tabular-nums}
+
+    
     /* ===== Lock screen overlay ===== */
     #lockscreen {
       position: fixed;
