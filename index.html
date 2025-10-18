@@ -124,24 +124,38 @@
     <!-- HOME -->
     <section id="home" class="active">
       <div class="hero">
-        <!-- add photo here -->
+        <!-- LEFT COLUMN (photo on top, card below) -->
         <img
+          class="home-photo"
           src="media/photos/home-page-photo.jpg"
           alt="Us — One Year"
           style="width:100%; max-width:420px; border-radius:16px; box-shadow:0 6px 18px rgba(0,0,0,.3);"
         >
-        <div class="card">
+    
+        <div class="card home-card">
           <h1 style="margin:0 0 8px;font-size:34px;line-height:1.1">Hi love — happy one year 💫</h1>
-          <p style="margin:0 0 16px; color:var(--muted)">I made us a little corner of the internet. Explore the note, wander down memory lane, and peek at the surprise box (some gifts unlock over time ✨).</p>
+          <p style="margin:0 0 16px; color:var(--muted)">
+            I made us a little corner of the internet. Explore the note, wander down memory lane, and peek at the surprise box (some gifts unlock over time ✨).
+          </p>
           <div style="display:flex; gap:10px; flex-wrap:wrap">
             <a class="btn" href="#/anniversary">Read the 1-year note</a>
             <a class="btn" href="#/memory">Walk memory lane</a>
             <a class="btn" href="#/surprise">Open the surprise box</a>
           </div>
         </div>
-        <div class="grid">
-          <div class="tile"><h3 style="margin-top:0">Today</h3><div id="today"></div></div>
-          <div class="tile"><h3 style="margin-top:0">Countdown</h3><div id="aniCountdown" class="countdown"></div></div>
+    
+        <!-- RIGHT COLUMN (tiles stacked) -->
+        <div class="grid right-grid">
+          <div class="tile">
+            <h3 style="margin-top:0">Today</h3>
+            <div id="today"></div>
+          </div>
+    
+          <div class="tile">
+            <h3 style="margin-top:0">Countdown</h3>
+            <div id="aniCountdown" class="countdown"></div>
+          </div>
+    
           <div class="tile nowplaying">
             <h3 style="margin-top:0">Now Playing</h3>
             <h4 style="color:var(--muted)">note: log in to spotify on browser to get full songs</h4>
