@@ -95,8 +95,23 @@
     .t-item{position:relative; padding-left:42px; margin:16px 0}
     .t-dot{position:absolute; left:6px; top:6px; width:16px; height:16px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 4px rgba(167,139,250,.2)}
 
-    .surprise-list{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:16px}
-    .s-card{padding:16px; border-radius:16px; border:1px solid rgba(255,255,255,.08); background:linear-gradient(to bottom right, rgba(255,255,255,.05), rgba(255,255,255,.02))}
+    .surprise-list {
+      display: flex;
+      flex-direction: column;
+      gap: 24px; /* space between surprises */
+      align-items: center; /* center them nicely */
+    }
+    
+    .s-card {
+      width: 100%;
+      max-width: 720px; /* cap so they don't stretch too wide on big screens */
+      padding: 24px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: linear-gradient(to bottom right, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      box-shadow: 0 8px 28px rgba(0,0,0,.25);
+      animation: fade 0.4s ease;
+    }
     .tag{padding:3px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.15); font-size:12px; opacity:.95}
     .tag.lock{border-color:rgba(250,204,21,.5); color:var(--gold)}
     .tag.open{border-color:rgba(52,211,153,.5); color:var(--accent2)}
